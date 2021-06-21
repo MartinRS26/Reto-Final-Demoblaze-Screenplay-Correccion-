@@ -5,5 +5,5 @@ import net.serenitybdd.screenplay.targets.Target;
 
 
 public class ProductosPage {
-    public static final Target SAMSUNG_GALAXY_S6 = Target.the("Seleccionar Samsung Galaxy S6").located(By.xpath("//*[@id=\"tbodyid\"]/div[1]/div/div/h4/a"));
+    public static final Target SAMSUNG_GALAXY_S6 = Target.the("Seleccionar Samsung Galaxy S6").located(By.xpath("//*/h4/a[contains(text(),'Samsung galaxy s6')]"));
 }

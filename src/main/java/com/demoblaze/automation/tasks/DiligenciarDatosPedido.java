@@ -17,10 +17,10 @@ public class DiligenciarDatosPedido implements Task {
 
     @Override
     public <T extends Actor> void performAs(T actor) {
-        actor.attemptsTo(IngresoDatosPedido.datosPedido(data));
+        actor.attemptsTo(IngresoDatosPedido.enLosEspacios(data));
     }
 
-    public static DiligenciarDatosPedido DemoBlaze(Data data) {
+    public static DiligenciarDatosPedido paraOrdenDePago(Data data) {
         return instrumented(DiligenciarDatosPedido.class, data);
     }
 }

@@ -6,6 +6,7 @@ import com.demoblaze.automation.questions.DatosOrdenDePago;
 import com.demoblaze.automation.questions.NombreProductoCarrito;
 import com.demoblaze.automation.tasks.*;
 import com.demoblaze.automation.userinterfaces.DemoBlazeHomePage;
+import com.demoblaze.automation.utils.informacionRequerida;
 import cucumber.api.java.Before;
 import cucumber.api.java.es.Cuando;
 import cucumber.api.java.es.Dado;
@@ -30,7 +31,7 @@ public class CompraExitosaStepDefinition {
     private WebDriver hisBrowser;
     private Actor usuario = Actor.named("usuario");
 
-    String nombreProducto = "Samsung galaxy s6";
+
 
     @Before
     public void setUp() {
@@ -40,35 +41,31 @@ public class CompraExitosaStepDefinition {
 
     @Dado("^que el usuario esta logueado$")
     public void queElUsuarioEstaLogueado() {
-        usuario.attemptsTo(IrHaciaLoginDeUsuario.DemoBlaze());
-        usuario.attemptsTo(DiligenciarCredencialesUsuario.DemoBlaze());
-        usuario.attemptsTo(IrAPerfilDeUsuario.Demoblaze());
+        usuario.attemptsTo(IrHaciaLogin.deUsuario());
+        usuario.attemptsTo(DiligenciarCredencialesUsuario.paraIngresarAPerfil());
+        usuario.attemptsTo(IrAPerfilDeUsuario.Registrado());
     }
 
     @Cuando("^agrego producto al carro$")
-    public void agregoProductoAlCarro() throws InterruptedException {
-        usuario.attemptsTo(SeleccionarProducto.DemoBlaze());
-        usuario.attemptsTo(AgregarAlCarrito.DemoBlaze());
-        WebDriverWait wait = new WebDriverWait(hisBrowser, 9);
-        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-        alert.accept();
-
+    public void agregoProductoAlCarro()throws InterruptedException  {
+        usuario.attemptsTo(SeleccionarProducto.Disponible());
+        usuario.attemptsTo(AgregarAlCarrito.deLaTienda());
+        usuario.attemptsTo(AceptarAlerta.deProductoAgregado(hisBrowser));
+        usuario.attemptsTo(IrAlCarrito.DemoBlaze());
     }
 
     @Entonces("^valido el nombre del articulo$")
     public void validoElNombreDelArticulo() {
-        usuario.attemptsTo(IrAlCarrito.DemoBlaze());
-        usuario.should(seeThat("El nombre del producto del carrito es:", NombreProductoCarrito.value(), equalTo(nombreProducto)).orComplainWith(Excepciones.class, Excepciones.ProductoNoCorresponde));
+
+        usuario.should(seeThat("El nombre del producto del carrito es:", NombreProductoCarrito.value(), equalTo(informacionRequerida.nombreProducto)).orComplainWith(Excepciones.class, Excepciones.ProductoNoCorresponde));
 
     }
 
     @Entonces("^los datos de orden de compra seran \"([^\"]*)\" y \"([^\"]*)\"$")
     public void losDatosDeOrdenDeCompraSeranY(String nombreEnOrden, String tarjetaOrden, List<Data> dataList) {
-        usuario.attemptsTo(RealizarPedido.DemoBlaze());
-        WebDriverWait wait1 = new WebDriverWait(hisBrowser, 9);
-        wait1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@id='orderModal']/div/div")));
-        usuario.attemptsTo(DiligenciarDatosPedido.DemoBlaze(dataList.get(0)));
-        usuario.attemptsTo(GenerarOrdenDePago.DemoBlaze());
+        usuario.attemptsTo(RealizarPedido.deProductos());
+        usuario.attemptsTo(DiligenciarDatosPedido.paraOrdenDePago(dataList.get(0)));
+        usuario.attemptsTo(GenerarOrdenDePago.alComprarProducto());
         usuario.should(seeThat("El nombre en la orden de compra es", DatosOrdenDePago.nombreOrden(), equalTo(nombreEnOrden)).orComplainWith(Excepciones.class, Excepciones.OrdenNoCorresponde));
         usuario.should(seeThat("El numero de la tarjeta de compra es", DatosOrdenDePago.numeroTarjeta(), equalTo(tarjetaOrden)).orComplainWith(Excepciones.class, Excepciones.OrdenNoCorresponde));
 

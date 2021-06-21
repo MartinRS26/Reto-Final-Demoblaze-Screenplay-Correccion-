@@ -16,7 +16,7 @@ Característica: Compra Exitosa
       | Martin | 1357924680 | Colombia | Tunja | Feb   | 2025 |
 
   @EscenarioFallido
-  Esquema del escenario: Verificar compra
+  Esquema del escenario: Verificación fallida
     Dado que el usuario esta logueado
     Cuando agrego producto al carro
     Entonces valido el nombre del articulo

@@ -28,7 +28,7 @@ public class IngresoDatosPedido implements Interaction {
         );
     }
 
-    public static IngresoDatosPedido datosPedido(Data data) {
+    public static IngresoDatosPedido enLosEspacios(Data data) {
         return instrumented(IngresoDatosPedido.class, data);
     }
 }
